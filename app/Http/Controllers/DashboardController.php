@@ -26,7 +26,7 @@ class DashboardController extends Controller
     {
         $user_id = auth()->id();
         $user = User::find( $user_id );
-        return $user;
-    	return view('dashboard');
+        $listings =  $user->listings;
+    	return view('dashboard', compact( 'listings' ) );
     }
 }
