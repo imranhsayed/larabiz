@@ -14,7 +14,8 @@ class ListingsController extends Controller
      */
     public function index()
     {
-        //
+    	$listings = Listing::orderBy( 'created_at', 'desc' )->get();
+        return view( '/listings',compact( 'listings' ) );
     }
 
     /**
@@ -67,7 +68,8 @@ class ListingsController extends Controller
      */
     public function show($id)
     {
-        //
+        $listing = Listing::find( $id );
+        return view( 'showlisting', compact( 'listing' ) );
     }
 
     /**
@@ -78,7 +80,8 @@ class ListingsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $listing = Listing::find( $id );
+        return view( 'edit', compact( 'listing' ) );
     }
 
     /**
@@ -90,7 +93,26 @@ class ListingsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+	    // Validate, the next line of code is not executed if the validation does not pass.
+	    $this->validate( request(), [
+		    'name' => 'required',
+		    'website' => 'required',
+		    'email' => 'email',
+		    'phone' => 'required',
+		    'address' => 'required',
+	    ] );
+
+    	$listing = Listing::find( $id );
+	    $listing ->user_id = auth()->id();
+	    $listing ->name = $request->input( 'name' );
+	    $listing ->address = $request->input( 'address' );
+	    $listing ->website = $request->input( 'website' );
+	    $listing ->email = ( $request->input( 'email' ) ) ? $request->input( 'email' ) : '';
+	    $listing ->phone = $request->input( 'phone' );
+	    $listing ->bio = ( $request->input( 'bio' ) ) ? $request->input( 'bio' ) : '';
+	    $listing->save();
+
+	    return redirect( url( '/dashboard' ) )->with( 'success', 'Listing edited successfully' );
     }
 
     /**
@@ -101,6 +123,8 @@ class ListingsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $listing = Listing::find( $id );
+        $listing->delete();
+        return redirect( '/dashboard' )->with( 'success', 'Deleted record successfully' );
     }
 }

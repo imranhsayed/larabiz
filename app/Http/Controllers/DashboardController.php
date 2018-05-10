@@ -14,7 +14,8 @@ class DashboardController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        // Meaning this dashboard will not be accessible if the user is not logged in.
+    	$this->middleware('auth');
     }
 
     /**

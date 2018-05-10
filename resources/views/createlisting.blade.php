@@ -1,6 +1,7 @@
 @extends( 'layouts.app' )
 
 @section( 'content' )
+    <a href="{{url( '/dashboard' )}}" class="btn btn-outline-secondary">Go Back</a>
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
